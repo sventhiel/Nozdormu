@@ -8,10 +8,22 @@ namespace Nozdormu.Server.Controllers
     [ApiController]
     public class NamesController : ControllerBase
     {
-        [HttpGet("Name")]
+        [HttpPost("Name")]
         public HumanName GetName(string name)
         {
             return new HumanName(name);
+        }
+
+        [HttpPost("Names")]
+        public List<HumanName> GetNames(List<string> names)
+        {
+            var list = new List<HumanName>();
+
+            foreach (var name in names)
+            {
+                list.Add(new HumanName(name));
+            }
+            return list;
         }
     }
 }
