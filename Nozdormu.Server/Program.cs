@@ -24,7 +24,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
     });
 
-builder.Services.AddMvc(options => options.EnableEndpointRouting = false);
+builder.Services.AddMvc(options => options.EnableEndpointRouting = false).AddXmlSerializerFormatters();
 
 var app = builder.Build();
 

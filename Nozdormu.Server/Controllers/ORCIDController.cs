@@ -12,6 +12,7 @@ namespace Nozdormu.Server.Controllers
 {
     [Route("api")]
     [ApiController]
+    //[Produces("application/xml")]
     public class ORCIDController : ControllerBase
     {
         [HttpGet("ORCID/{orcid}/Person")]
