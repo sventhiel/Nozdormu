@@ -1,3 +1,4 @@
+using Exceptionless;
 using LiteDB;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Configuration;
@@ -10,6 +11,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddExceptionless("s2I5hEu9zfDuBYAb9BOTXCFaJiiHbN625kpUbSFv");
 
 // LiteDB
 
@@ -64,5 +67,7 @@ app.UseSwaggerUI(options =>
     options.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
     options.RoutePrefix = "swagger/api";
 });
+
+app.UseExceptionless();
 
 app.Run();

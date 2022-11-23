@@ -10,6 +10,8 @@ namespace Nozdormu.Server.Entities
         public string Salt { get; set; }
         public string Pattern { get; set; }
 
+        public string Token { get; set; }
+
         //[BsonRef("accounts")]
         //public Account Account { get; set; }
     }

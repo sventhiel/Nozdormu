@@ -86,11 +86,19 @@ namespace Nozdormu.Server.Services
 
         private static string computeSHA512Hash(string password, string salt)
         {
-            using (var sha = new SHA512Managed())
+            try
             {
-                byte[] saltedPassword = (Encoding.UTF8.GetBytes(salt).Concat(Encoding.UTF8.GetBytes(password))).ToArray();
-                return Convert.ToBase64String(sha.ComputeHash(saltedPassword));
+                using (var sha512 = new SHA512Managed())
+                {
+                    byte[] saltedPassword = (Encoding.UTF8.GetBytes(salt).Concat(Encoding.UTF8.GetBytes(password))).ToArray();
+                    return Convert.ToBase64String(sha512.ComputeHash(saltedPassword));
+                }
             }
+            catch(Exception e)
+            {
+                throw e;
+            }
+            
         }
 
         private static string generate(int size = 64)
