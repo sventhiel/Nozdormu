@@ -8,6 +8,7 @@ namespace Nozdormu.Server.Entities
         public string Prefix { get; set; }
         public string Suffix { get; set; }
         public DateTimeOffset CreationDate { get; set; }
+
         [BsonRef("users")]
         public User User { get; set; }
     }

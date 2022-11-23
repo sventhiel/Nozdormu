@@ -1,4 +1,6 @@
+using LiteDB;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
@@ -8,6 +10,10 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+// LiteDB
+
+builder.Services.AddSingleton(new ConnectionString(builder.Configuration["ConnectionStrings:Nozdormu"]));
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
@@ -24,7 +30,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
     });
 
-builder.Services.AddMvc(options => options.EnableEndpointRouting = false).AddXmlSerializerFormatters();
+builder.Services.AddMvc(options => options.EnableEndpointRouting = false);//.AddXmlSerializerFormatters();
 
 var app = builder.Build();
 

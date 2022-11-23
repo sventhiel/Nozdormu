@@ -1,8 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using NameParser;
-using Newtonsoft.Json;
-using Nozdormu.Library.Models.Names;
 
 namespace Nozdormu.Server.Controllers
 {
@@ -10,22 +7,20 @@ namespace Nozdormu.Server.Controllers
     [ApiController]
     public class NamesController : ControllerBase
     {
-        [HttpPost("Name")]
-        public ReadHumanNameModel GetName([FromBody]string name)
+        [HttpGet("Name")]
+        public HumanName GetName(string name)
         {
-            var humanName = new HumanName(name);
-            return ReadHumanNameModel.Convert(humanName);
+            return new HumanName(name);
         }
 
         [HttpPost("Names")]
-        public List<ReadHumanNameModel> GetNames([FromBody]List<string> names)
+        public List<HumanName> GetNames([FromBody] List<string> names)
         {
-            var list = new List<ReadHumanNameModel>();
+            var list = new List<HumanName>();
 
             foreach (var name in names)
             {
-                var humanName = new HumanName(name);
-                list.Add(ReadHumanNameModel.Convert(humanName));
+                list.Add(new HumanName(name));
             }
             return list;
         }

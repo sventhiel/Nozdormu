@@ -1,18 +1,12 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using NameParser;
+﻿using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using Nozdormu.Library.Models;
 using Nozdormu.Library.Models.ORCID;
-using Nozdormu.Server.Entities;
-using Nozdormu.Server.Models;
 using RestSharp;
 
 namespace Nozdormu.Server.Controllers
 {
     [Route("api")]
     [ApiController]
-    //[Produces("application/xml")]
     public class ORCIDController : ControllerBase
     {
         [HttpGet("ORCID/{orcid}/Person")]

@@ -1,8 +1,5 @@
 ﻿using Newtonsoft.Json;
 using Nozdormu.Library.Converters;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Nozdormu.Library.Models.ORCID
 {

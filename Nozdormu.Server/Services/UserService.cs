@@ -1,6 +1,6 @@
 ﻿using LiteDB;
 using Nozdormu.Server.Entities;
-using System.Net;
+using System.Drawing;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -15,21 +15,38 @@ namespace Nozdormu.Server.Services
             _connectionString = connectionString;
         }
 
-        public long Create(string name, string pattern, long accountId)
+        public long Create(string username, string password, string pattern, long accountId)
         {
             using (var db = new LiteDatabase(_connectionString))
             {
                 var users = db.GetCollection<User>("users");
                 var accounts = db.GetCollection<Account>("accounts");
 
+                // salt
+                var salt = Convert.ToBase64String(RandomNumberGenerator.GetBytes(6));
+
                 var user = new User()
                 {
-                    Name = name,
-                    Pattern = pattern,
-                    Account = accounts.FindById(accountId),
+                    Username = username,
+                    Salt = salt,
+                    Password = computeSHA512Hash(password, salt),
+                    Pattern = pattern
+                    //Account = accounts.FindById(accountId)
                 };
 
                 return users.Insert(user);
+            }
+        }
+
+        public bool Verify(string username, string password)
+        {
+            using (var db = new LiteDatabase(_connectionString))
+            {
+                var users = db.GetCollection<User>("users");
+
+                var user = users.Find(u => u.Username == username).Single();
+
+                return (user.Password == computeSHA512Hash(password, (user.Salt)));
             }
         }
 
@@ -65,6 +82,15 @@ namespace Nozdormu.Server.Services
             }
 
             return users;
+        }
+
+        private static string computeSHA512Hash(string password, string salt)
+        {
+            using (var sha = new SHA512Managed())
+            {
+                byte[] saltedPassword = (Encoding.UTF8.GetBytes(salt).Concat(Encoding.UTF8.GetBytes(password))).ToArray();
+                return Convert.ToBase64String(sha.ComputeHash(saltedPassword));
+            }
         }
 
         private static string generate(int size = 64)
