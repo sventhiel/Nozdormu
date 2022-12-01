@@ -1,9 +1,5 @@
 using Exceptionless;
 using LiteDB;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.Extensions.Configuration;
-using Microsoft.IdentityModel.Tokens;
-using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,25 +11,15 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddExceptionless("s2I5hEu9zfDuBYAb9BOTXCFaJiiHbN625kpUbSFv");
 
 // LiteDB
-
 builder.Services.AddSingleton(new ConnectionString(builder.Configuration["ConnectionStrings:Nozdormu"]));
 
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddJwtBearer(options =>
-    {
-        options.TokenValidationParameters = new TokenValidationParameters
-        {
-            ValidateIssuer = true,
-            ValidateAudience = true,
-            ValidateLifetime = true,
-            ValidateIssuerSigningKey = true,
-            ValidIssuer = builder.Configuration["Jwt:Issuer"],
-            ValidAudience = builder.Configuration["Jwt:Issuer"],
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
-        };
-    });
+builder.Services.AddAuthentication();
 
-builder.Services.AddMvc(options => options.EnableEndpointRouting = false);//.AddXmlSerializerFormatters();
+builder.Services.AddMvc(options =>
+{
+    //options.Filters.Add(new AuthAttribute());
+    options.EnableEndpointRouting = false;
+});
 
 var app = builder.Build();
 
@@ -46,11 +32,10 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseStaticFiles();
 
 app.UseRouting();
 
-app.UseStaticFiles();
-app.UseCookiePolicy();
 app.UseAuthentication();
 app.UseAuthorization();
 

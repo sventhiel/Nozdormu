@@ -2,6 +2,9 @@
 using Microsoft.AspNetCore.Mvc;
 using Nozdormu.Server.Models;
 using Nozdormu.Server.Services;
+using Nozdormu.Server.Utilities;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace Nozdormu.Server.Controllers
 {
@@ -43,6 +46,12 @@ namespace Nozdormu.Server.Controllers
         public IActionResult Verify(LoginUserModel model)
         {
             var userService = new UserService(_connectionString);
+
+            var user = userService.FindById(1);
+
+            user.Token = CryptographyUtils.GetRandomHexadecimalString(32);
+
+            userService.Update(user);
 
             var x = userService.Verify(model.Username, model.Password);
 

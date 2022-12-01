@@ -1,6 +1,8 @@
 ﻿using LiteDB;
 using Nozdormu.Server.Entities;
+using Nozdormu.Server.Utilities;
 using System.Drawing;
+using System.Reflection.Metadata.Ecma335;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -23,14 +25,15 @@ namespace Nozdormu.Server.Services
                 var accounts = db.GetCollection<Account>("accounts");
 
                 // salt
-                var salt = Convert.ToBase64String(RandomNumberGenerator.GetBytes(6));
+                var salt = CryptographyUtils.GetRandomBase64String(16);
 
                 var user = new User()
                 {
                     Username = username,
                     Salt = salt,
-                    Password = computeSHA512Hash(password, salt),
-                    Pattern = pattern
+                    Password = CryptographyUtils.GetSHA512HashAsBase64(salt, password),
+                    Pattern = pattern,
+                    Token = CryptographyUtils.GetRandomHexadecimalString(32),
                     //Account = accounts.FindById(accountId)
                 };
 
@@ -46,7 +49,7 @@ namespace Nozdormu.Server.Services
 
                 var user = users.Find(u => u.Username == username).Single();
 
-                return (user.Password == computeSHA512Hash(password, (user.Salt)));
+                return (user.Password == CryptographyUtils.GetSHA512HashAsBase64(user.Salt, password));
             }
         }
 
@@ -70,6 +73,21 @@ namespace Nozdormu.Server.Services
             }
         }
 
+        public User FindByToken(string token)
+        {
+            using (var db = new LiteDatabase(_connectionString))
+            {
+                var col = db.GetCollection<User>("users");
+
+                var users = col.Find(u => u.Token.Equals(token));
+
+                if (users.Count() != 1)
+                    return null;
+
+                return users.First();
+            }
+        }
+
         public List<User> Find()
         {
             List<User> users = null;
@@ -84,41 +102,13 @@ namespace Nozdormu.Server.Services
             return users;
         }
 
-        private static string computeSHA512Hash(string password, string salt)
+        public bool Update(User user)
         {
-            try
+            using (var db = new LiteDatabase(_connectionString))
             {
-                using (var sha512 = new SHA512Managed())
-                {
-                    byte[] saltedPassword = (Encoding.UTF8.GetBytes(salt).Concat(Encoding.UTF8.GetBytes(password))).ToArray();
-                    return Convert.ToBase64String(sha512.ComputeHash(saltedPassword));
-                }
-            }
-            catch(Exception e)
-            {
-                throw e;
-            }
-            
-        }
+                var col = db.GetCollection<User>("users");
 
-        private static string generate(int size = 64)
-        {
-            // Characters except I, l, O, 1, and 0 to decrease confusion when hand typing tokens
-            var charSet = "abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ23456789";
-            var chars = charSet.ToCharArray();
-            var data = new byte[1];
-
-            using (var crypto = new RNGCryptoServiceProvider())
-            {
-                crypto.GetNonZeroBytes(data);
-                data = new byte[size];
-                crypto.GetNonZeroBytes(data);
-                var result = new StringBuilder(size);
-                foreach (var b in data)
-                {
-                    result.Append(chars[b % (chars.Length)]);
-                }
-                return result.ToString();
+                return col.Update(user);
             }
         }
     }
