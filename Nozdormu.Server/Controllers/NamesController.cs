@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using NameParser;
 
 namespace Nozdormu.Server.Controllers
@@ -7,13 +8,14 @@ namespace Nozdormu.Server.Controllers
     [ApiController]
     public class NamesController : ControllerBase
     {
+        [Authorize]
         [HttpGet("Name")]
         public HumanName GetName(string name)
         {
             return new HumanName(name);
         }
 
-        [HttpPost("Names")]
+        [HttpPost("Names"), AllowAnonymous]
         public List<HumanName> GetNames([FromBody] List<string> names)
         {
             var list = new List<HumanName>();

@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Nozdormu.Server.Models;
 using System.Diagnostics;
+using System.Security.Claims;
 
 namespace Nozdormu.Server.Controllers
 {
@@ -13,15 +14,17 @@ namespace Nozdormu.Server.Controllers
         {
             _logger = logger;
         }
-
         public IActionResult Index()
         {
             return View();
         }
-        [AllowAnonymous]
+        [Authorize]
         public IActionResult Privacy()
         {
-            return View();
+            var username = User.Identity.Name;
+
+
+            return View("Privacy", username);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
