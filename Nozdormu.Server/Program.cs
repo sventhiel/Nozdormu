@@ -1,10 +1,12 @@
 using Exceptionless;
 using LiteDB;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.Net.Http.Headers;
 using Microsoft.OpenApi.Models;
+using Nozdormu.Server.Authentication;
 using Swashbuckle.AspNetCore.Filters;
 using System.Text;
 
@@ -15,10 +17,25 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
 {
+    var basicSecurityScheme = new OpenApiSecurityScheme
+    {
+        Name = "Basic",
+        In = ParameterLocation.Header,
+        Type = SecuritySchemeType.Http,
+        Scheme = "Basic",
+        Description = "Put **_ONLY_** your JWT Bearer token on textbox below!",
+
+        Reference = new OpenApiReference
+        {
+            Id = "Basic",
+            Type = ReferenceType.SecurityScheme
+        }
+    };
+
     var jwtSecurityScheme = new OpenApiSecurityScheme
     {
         BearerFormat = "JWT",
-        Name = "JWT Authentication",
+        Name = "Bearer",
         In = ParameterLocation.Header,
         Type = SecuritySchemeType.Http,
         Scheme = JwtBearerDefaults.AuthenticationScheme,
@@ -31,9 +48,11 @@ builder.Services.AddSwaggerGen(options =>
         }
     };
 
+    options.AddSecurityDefinition(basicSecurityScheme.Reference.Id, basicSecurityScheme);
     options.AddSecurityDefinition(jwtSecurityScheme.Reference.Id, jwtSecurityScheme);
 
-    options.OperationFilter<SecurityRequirementsOperationFilter>();
+    //options.OperationFilter<SecurityRequirementsOperationFilter>();
+    options.OperationFilter<AuthorizeHeaderOperationFilter>();
 });
 
 builder.Services.AddExceptionless("s2I5hEu9zfDuBYAb9BOTXCFaJiiHbN625kpUbSFv");
@@ -50,7 +69,10 @@ builder.Services.AddAuthentication(options =>
     {
         options.LoginPath = "/Users/Login";
         options.AccessDeniedPath = "/Users/Login";
+        options.ExpireTimeSpan = TimeSpan.FromDays(1);
     })
+    .AddScheme<AuthenticationSchemeOptions, BasicAuthenticationHandler>
+                ("Basic", null)
     .AddJwtBearer(options =>
     {
         options.SaveToken = true;
@@ -59,9 +81,9 @@ builder.Services.AddAuthentication(options =>
         {
             ValidateIssuer = false,
             ValidateAudience = false,
-            ValidAudience = builder.Configuration["JWT:ValidAudience"],
-            ValidIssuer = builder.Configuration["JWT:ValidIssuer"],
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:Secret"]))
+            ValidAudience = "lkjlk",
+            ValidIssuer = "lklH",
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("sadasd"))
         };
     })
     .AddPolicyScheme("JWT_OR_COOKIE", "JWT_OR_COOKIE", options =>
@@ -69,8 +91,14 @@ builder.Services.AddAuthentication(options =>
         options.ForwardDefaultSelector = context =>
         {
             string authorization = context.Request.Headers[HeaderNames.Authorization];
-            if (!string.IsNullOrEmpty(authorization) && authorization.StartsWith("Bearer ") || context.Request.Path.StartsWithSegments("/api", StringComparison.InvariantCultureIgnoreCase))
+            
+            if(context.Request.Path.StartsWithSegments("/api", StringComparison.InvariantCultureIgnoreCase))
+            {
+                if (!string.IsNullOrEmpty(authorization) && authorization.StartsWith("Basic "))
+                    return "Basic";
+
                 return JwtBearerDefaults.AuthenticationScheme;
+            }
 
             return CookieAuthenticationDefaults.AuthenticationScheme;
         };

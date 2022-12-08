@@ -1,6 +1,7 @@
 ﻿using LiteDB;
 using Nozdormu.Server.Entities;
 using Nozdormu.Server.Utilities;
+using NuGet.Common;
 using System.Drawing;
 using System.Reflection.Metadata.Ecma335;
 using System.Security.Cryptography;
@@ -80,6 +81,21 @@ namespace Nozdormu.Server.Services
                 var col = db.GetCollection<User>("users");
 
                 var users = col.Find(u => u.Token.Equals(token));
+
+                if (users.Count() != 1)
+                    return null;
+
+                return users.First();
+            }
+        }
+
+        public User FindByName(string username)
+        {
+            using (var db = new LiteDatabase(_connectionString))
+            {
+                var col = db.GetCollection<User>("users");
+
+                var users = col.Find(u => u.Username.Equals(username));
 
                 if (users.Count() != 1)
                     return null;

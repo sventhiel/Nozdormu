@@ -5,10 +5,12 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json.Linq;
+using Nozdormu.Server.Configurations;
 using Nozdormu.Server.Entities;
 using Nozdormu.Server.Models;
 using Nozdormu.Server.Services;
 using Nozdormu.Server.Utilities;
+using System.Configuration;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
@@ -19,10 +21,12 @@ namespace Nozdormu.Server.Controllers
     public class UsersController : Controller
     {
         private ConnectionString _connectionString;
+        private JwtConfiguration _jwtConfiguration;
 
-        public UsersController(ConnectionString connectionString)
+        public UsersController(IConfiguration configuration, ConnectionString connectionString)
         {
             _connectionString = connectionString;
+            _jwtConfiguration = configuration.GetSection("JWT").Get<JwtConfiguration>();
         }
 
         public IActionResult Login()
@@ -38,7 +42,6 @@ namespace Nozdormu.Server.Controllers
                 var claims = new List<Claim>
                 {
                     new Claim(ClaimTypes.Name, model.Username),
-                    new Claim(ClaimTypes.Email, "asashd@sad.de"),
                     new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
                 };
 
@@ -50,7 +53,7 @@ namespace Nozdormu.Server.Controllers
                     CookieAuthenticationDefaults.AuthenticationScheme,
                     new ClaimsPrincipal(claimsIdentity));
 
-                var token = new JwtSecurityTokenHandler().WriteToken(GetToken(claims));
+                var token = GetToken();
 
                 return RedirectToAction("Index", "Home");
             }
@@ -58,25 +61,20 @@ namespace Nozdormu.Server.Controllers
             return View();
         }
 
-        private JwtSecurityToken GetToken(List<Claim> authClaims)
+        [Authorize]
+        public string GetToken()
         {
-            var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("JWTAuthenticationHIGHsecuredPasswordVVVp1OH7Xzyr"));
+            var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtConfiguration.IssuerSigningKey));
 
             var token = new JwtSecurityToken(
-                issuer: "https://localhost:7033",
-                audience: "https://localhost:7033",
-                expires: DateTime.Now.AddHours(3),
-                claims: authClaims,
-                signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256)
+                issuer: _jwtConfiguration.ValidIssuer,
+                audience: _jwtConfiguration.ValidAudience,
+                expires: DateTime.Now.AddHours(_jwtConfiguration.ValidLifetime),
+                claims: new[] { new Claim(ClaimTypes.Name, User.Identity.Name) },
+        signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha512)
                 );
 
-            return token;
-        }
-
-        [HttpPost]
-        public IActionResult Logout(string x)
-        {
-            return View();
+            return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
         public IActionResult Index(string value = "hallo")
