@@ -48,7 +48,10 @@ namespace Nozdormu.Server.Services
             {
                 var users = db.GetCollection<User>("users");
 
-                var user = users.Find(u => u.Username == username).Single();
+                var user = users.FindOne(u => u.Username == username);
+
+                if (user == null)
+                    return false;
 
                 return (user.Password == CryptographyUtils.GetSHA512HashAsBase64(user.Salt, password));
             }
