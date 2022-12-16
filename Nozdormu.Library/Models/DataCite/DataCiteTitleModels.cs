@@ -1,0 +1,55 @@
+﻿using Newtonsoft.Json.Converters;
+using Newtonsoft.Json.Linq;
+using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Runtime.Serialization;
+using System.Text;
+
+namespace Nozdormu.Library.Models.DataCite
+{
+    public class ReadDataCiteTitleModel
+    {
+        [JsonProperty("title")]
+        [Required]
+        public string Title { get; set; }
+
+        [JsonProperty("lang", DefaultValueHandling = DefaultValueHandling.Ignore)]
+        public string Language { get; set; }
+
+        [JsonProperty("titleType", DefaultValueHandling = DefaultValueHandling.Ignore)]
+        [JsonConverter(typeof(StringEnumConverter))]
+        public DataCiteTitleType? TitleType { get; set; }
+
+        [JsonConstructor]
+        protected ReadDataCiteTitleModel()
+        { }
+
+        public ReadDataCiteTitleModel(string title, string lang = null, DataCiteTitleType? titleType = null)
+        {
+            Title = title;
+
+            if (lang != null)
+                Language = lang;
+
+            if (titleType != null)
+                TitleType = titleType;
+        }
+    }
+
+    public enum DataCiteTitleType
+    {
+        [EnumMember(Value = "AlternativeTitle")]
+        AlternativeTitle = 1,
+
+        [EnumMember(Value = "Subtitle")]
+        Subtitle = 2,
+
+        [EnumMember(Value = "TranslatedTitle")]
+        TranslatedTitle = 3,
+
+        [EnumMember(Value = "Other")]
+        Other = 4
+    }
+}
