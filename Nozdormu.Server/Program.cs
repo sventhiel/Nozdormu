@@ -7,7 +7,6 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.Net.Http.Headers;
 using Microsoft.OpenApi.Models;
 using Nozdormu.Server.Authentication;
-using Swashbuckle.AspNetCore.Filters;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -62,8 +61,8 @@ builder.Services.AddSingleton(new ConnectionString(builder.Configuration["Connec
 
 builder.Services.AddAuthentication(options =>
     {
-    options.DefaultScheme = "JWT_OR_COOKIE";
-    options.DefaultChallengeScheme = "JWT_OR_COOKIE";
+        options.DefaultScheme = "JWT_OR_COOKIE";
+        options.DefaultChallengeScheme = "JWT_OR_COOKIE";
     })
     .AddCookie(options =>
     {
@@ -91,10 +90,10 @@ builder.Services.AddAuthentication(options =>
         options.ForwardDefaultSelector = context =>
         {
             string authorization = context.Request.Headers[HeaderNames.Authorization];
-            
-            if(context.Request.Path.StartsWithSegments("/api", StringComparison.InvariantCultureIgnoreCase))
+
+            if (context.Request.Path.StartsWithSegments("/api", StringComparison.InvariantCultureIgnoreCase))
             {
-                if (!string.IsNullOrEmpty(authorization) && authorization.StartsWith("Basic "))
+                if (!string.IsNullOrEmpty(authorization) && authorization.StartsWith("Basic ", StringComparison.InvariantCultureIgnoreCase))
                     return "Basic";
 
                 return JwtBearerDefaults.AuthenticationScheme;

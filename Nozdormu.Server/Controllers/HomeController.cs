@@ -1,5 +1,4 @@
-﻿using Fare;
-using LiteDB;
+﻿using LiteDB;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
@@ -8,7 +7,6 @@ using Nozdormu.Server.Configurations;
 using Nozdormu.Server.Models;
 using Nozdormu.Server.Services;
 using System.Diagnostics;
-using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 
 namespace Nozdormu.Server.Controllers
@@ -25,6 +23,7 @@ namespace Nozdormu.Server.Controllers
             _connectionString = connectionString;
             _jwtConfiguration = configuration.GetSection("JWT").Get<JwtConfiguration>();
         }
+
         public IActionResult Index()
         {
             return View();
@@ -70,13 +69,12 @@ namespace Nozdormu.Server.Controllers
             return RedirectToAction("Index");
         }
 
-        #endregion
+        #endregion Authentication
 
         [Authorize]
         public IActionResult Privacy()
         {
             var username = User.Identity.Name;
-
 
             return View("Privacy", username);
         }

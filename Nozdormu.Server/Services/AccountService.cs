@@ -1,6 +1,5 @@
 ﻿using LiteDB;
 using Nozdormu.Server.Entities;
-using System.Net;
 
 namespace Nozdormu.Server.Services
 {

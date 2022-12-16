@@ -1,10 +1,10 @@
-﻿using Microsoft.AspNetCore.Authentication;
+﻿using LiteDB;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.Extensions.Options;
-using System.Security.Claims;
-using System.Text.Encodings.Web;
-using System.Text;
 using Nozdormu.Server.Services;
-using LiteDB;
+using System.Security.Claims;
+using System.Text;
+using System.Text.Encodings.Web;
 
 namespace Nozdormu.Server.Authentication
 {
@@ -31,7 +31,7 @@ namespace Nozdormu.Server.Authentication
                 var credentials = Encoding.UTF8.GetString(Convert.FromBase64String(token)).Split(':');
 
                 var userService = new UserService(_connectionString);
-                
+
                 if (userService.Verify(credentials[0], credentials[1]))
                 {
                     var claims = new[] { new Claim(ClaimTypes.Name, credentials[0]) };

@@ -1,6 +1,4 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc.Authorization;
-using Microsoft.Build.Evaluation;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
@@ -32,7 +30,7 @@ namespace Nozdormu.Server.Authentication
                         Reference = new OpenApiReference
                         {
                             Type = ReferenceType.SecurityScheme,
-                            // Definition name. 
+                            // Definition name.
                             // Should exactly match the one given in the service configuration
                             Id = "Bearer"
                         }
@@ -48,7 +46,7 @@ namespace Nozdormu.Server.Authentication
                         Reference = new OpenApiReference
                         {
                             Type = ReferenceType.SecurityScheme,
-                            // Definition name. 
+                            // Definition name.
                             // Should exactly match the one given in the service configuration
                             Id = "Basic"
                         }

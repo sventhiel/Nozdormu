@@ -9,6 +9,7 @@ namespace Nozdormu.Server.Entities
         public string Suffix { get; set; }
         public DateTimeOffset CreationDate { get; set; }
         public DOIState State { get; set; }
+
         [BsonRef("users")]
         public User User { get; set; }
     }

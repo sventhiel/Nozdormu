@@ -1,6 +1,4 @@
-﻿using LiteDB;
-
-namespace Nozdormu.Server.Entities
+﻿namespace Nozdormu.Server.Entities
 {
     public class User
     {

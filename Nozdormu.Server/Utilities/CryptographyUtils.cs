@@ -1,7 +1,4 @@
-﻿using Microsoft.AspNetCore.DataProtection;
-using Nozdormu.Server.Entities;
-using System.Net.Sockets;
-using System.Security.Cryptography;
+﻿using System.Security.Cryptography;
 using System.Text;
 
 namespace Nozdormu.Server.Utilities
@@ -35,7 +32,7 @@ namespace Nozdormu.Server.Utilities
         public static string GetRandomBase64String(int size)
         {
             var rnd = RandomNumberGenerator.GetBytes(size);
-            return Convert.ToBase64String(rnd);;
+            return Convert.ToBase64String(rnd); ;
         }
     }
 }

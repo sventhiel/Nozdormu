@@ -4,16 +4,12 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
-using Newtonsoft.Json.Linq;
 using Nozdormu.Server.Configurations;
-using Nozdormu.Server.Entities;
 using Nozdormu.Server.Models;
 using Nozdormu.Server.Services;
 using Nozdormu.Server.Utilities;
-using System.Configuration;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-using System.Security.Cryptography;
 using System.Text;
 
 namespace Nozdormu.Server.Controllers
@@ -37,7 +33,7 @@ namespace Nozdormu.Server.Controllers
         [HttpPost]
         public async Task<IActionResult> Login(LoginUserModel model)
         {
-            if(model.Username == "admin")
+            if (model.Username == "admin")
             {
                 var claims = new List<Claim>
                 {
@@ -97,8 +93,6 @@ namespace Nozdormu.Server.Controllers
 
         public IActionResult Verify()
         {
-
-
             return View();
         }
 
