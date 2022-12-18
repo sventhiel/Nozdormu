@@ -15,7 +15,7 @@ namespace Nozdormu.Server.Controllers
             return new HumanName(name);
         }
 
-        [HttpPost("Names"), AllowAnonymous]
+        [HttpPost("Names")]
         public List<HumanName> GetNames([FromBody] List<string> names)
         {
             var list = new List<HumanName>();

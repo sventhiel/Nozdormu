@@ -8,7 +8,7 @@ using System.Text;
 
 namespace Nozdormu.Library.Models.DataCite
 {
-    public class ReadDataCiteDateModel
+    public class DataCiteDate
     {
         [JsonProperty("date")]
         public string Date { get; set; }
@@ -17,10 +17,10 @@ namespace Nozdormu.Library.Models.DataCite
         public DataCiteDateType DateType { get; set; }
 
         [JsonConstructor]
-        protected ReadDataCiteDateModel()
+        protected DataCiteDate()
         { }
 
-        public ReadDataCiteDateModel(string date, DataCiteDateType type)
+        public DataCiteDate(string date, DataCiteDateType type)
         {
             Date = date;
             DateType = type;

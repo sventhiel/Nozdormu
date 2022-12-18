@@ -7,7 +7,7 @@ using System.Text;
 
 namespace Nozdormu.Library.Models.DataCite
 {
-    public class ReadDataCiteIdentifierModel
+    public class DataCiteIdentifier
     {
         [JsonProperty("identifier")]
         public string Identifier { get; set; }
@@ -16,10 +16,10 @@ namespace Nozdormu.Library.Models.DataCite
         public DataCiteIdentifierType IdentifierType { get; set; }
 
         [JsonConstructor]
-        protected ReadDataCiteIdentifierModel()
+        protected DataCiteIdentifier()
         { }
 
-        public ReadDataCiteIdentifierModel(string identifier, DataCiteIdentifierType identifierType)
+        public DataCiteIdentifier(string identifier, DataCiteIdentifierType identifierType)
         {
             Identifier = identifier;
             IdentifierType = identifierType;

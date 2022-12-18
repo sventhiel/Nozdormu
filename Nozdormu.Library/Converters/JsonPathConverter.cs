@@ -112,7 +112,6 @@ namespace Nozdormu.Library.Converters
                 }
             }
 
-            serializer.Converters.Add(new StringEnumConverter());
             serializer.NullValueHandling = NullValueHandling.Ignore;
             serializer.DefaultValueHandling = DefaultValueHandling.Ignore;
 

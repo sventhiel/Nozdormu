@@ -6,8 +6,12 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.Net.Http.Headers;
 using Microsoft.OpenApi.Models;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
+using Nozdormu.Library.Converters;
 using Nozdormu.Server.Authentication;
 using System.Text;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -107,6 +111,15 @@ builder.Services.AddMvc(options =>
 {
     //options.Filters.Add(new AuthAttribute());
     options.EnableEndpointRouting = false;
+});
+
+builder.Services.AddControllers().AddJsonOptions(options =>
+{
+    options.JsonSerializerOptions.Converters
+        .Add(new JsonStringEnumConverter());
+
+    options.JsonSerializerOptions.DefaultIgnoreCondition =
+             JsonIgnoreCondition.WhenWritingNull;
 });
 
 var app = builder.Build();

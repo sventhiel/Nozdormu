@@ -4,7 +4,7 @@ using Nozdormu.Library.Converters;
 namespace Nozdormu.Library.Models.ORCID
 {
     [JsonConverter(typeof(JsonPathConverter))]
-    public class ReadORCIDNameModel
+    public class ORCIDName
     {
         [JsonProperty("given-names.value")]
         public string Firstname { get; set; }

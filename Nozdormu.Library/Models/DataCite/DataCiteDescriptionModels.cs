@@ -8,7 +8,7 @@ using System.Text;
 
 namespace Nozdormu.Library.Models.DataCite
 {
-    public class ReadDataCiteDescriptionModel
+    public class DataCiteDescription
     {
         [JsonProperty("lang")]
         public string Language { get; set; }
@@ -21,10 +21,10 @@ namespace Nozdormu.Library.Models.DataCite
         public DataCiteDescriptionType? DescriptionType { get; set; }
 
         [JsonConstructor]
-        protected ReadDataCiteDescriptionModel()
+        protected DataCiteDescription()
         { }
 
-        public ReadDataCiteDescriptionModel(string description, string lang = null, DataCiteDescriptionType? descriptionType = null)
+        public DataCiteDescription(string description, string lang = null, DataCiteDescriptionType? descriptionType = null)
         {
             Description = description;
 

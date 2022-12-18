@@ -5,16 +5,16 @@ using System.Text;
 
 namespace Nozdormu.Library.Models.DataCite
 {
-    public class ReadDataCiteSubjectModel
+    public class DataCiteSubject
     {
         [JsonProperty("subject")]
         public string Subject { get; set; }
 
         [JsonConstructor]
-        protected ReadDataCiteSubjectModel()
+        protected DataCiteSubject()
         { }
 
-        public ReadDataCiteSubjectModel(string subject)
+        public DataCiteSubject(string subject)
         {
             Subject = subject;
         }

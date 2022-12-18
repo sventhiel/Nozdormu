@@ -9,7 +9,7 @@ using System.Text;
 
 namespace Nozdormu.Library.Models.DataCite
 {
-    public class ReadDataCiteCreatorModel
+    public class DataCiteCreator
     {
         [JsonProperty("name")]
         public string Name { get; set; }
@@ -27,10 +27,10 @@ namespace Nozdormu.Library.Models.DataCite
 
 
         [JsonConstructor]
-        protected ReadDataCiteCreatorModel()
+        protected DataCiteCreator()
         { }
 
-        public ReadDataCiteCreatorModel(string name, DataCiteCreatorType type)
+        public DataCiteCreator(string name, DataCiteCreatorType type)
         {
             switch (type)
             {
@@ -56,7 +56,7 @@ namespace Nozdormu.Library.Models.DataCite
             }
         }
 
-        public ReadDataCiteCreatorModel(string firstname, string lastname)
+        public DataCiteCreator(string firstname, string lastname)
         {
             GivenName = firstname;
             FamilyName = lastname;

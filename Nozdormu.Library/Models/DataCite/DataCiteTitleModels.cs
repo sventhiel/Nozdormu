@@ -9,7 +9,7 @@ using System.Text;
 
 namespace Nozdormu.Library.Models.DataCite
 {
-    public class ReadDataCiteTitleModel
+    public class DataCiteTitle
     {
         [JsonProperty("title")]
         [Required]
@@ -23,10 +23,10 @@ namespace Nozdormu.Library.Models.DataCite
         public DataCiteTitleType? TitleType { get; set; }
 
         [JsonConstructor]
-        protected ReadDataCiteTitleModel()
+        protected DataCiteTitle()
         { }
 
-        public ReadDataCiteTitleModel(string title, string lang = null, DataCiteTitleType? titleType = null)
+        public DataCiteTitle(string title, string lang = null, DataCiteTitleType? titleType = null)
         {
             Title = title;
 
