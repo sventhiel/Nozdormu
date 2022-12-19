@@ -23,7 +23,7 @@ namespace Nozdormu.Library.Models.DataCite
         public DataCiteTitleType? TitleType { get; set; }
 
         [JsonConstructor]
-        protected DataCiteTitle()
+        public DataCiteTitle()
         { }
 
         public DataCiteTitle(string title, string lang = null, DataCiteTitleType? titleType = null)
@@ -40,16 +40,9 @@ namespace Nozdormu.Library.Models.DataCite
 
     public enum DataCiteTitleType
     {
-        [EnumMember(Value = "AlternativeTitle")]
         AlternativeTitle = 1,
-
-        [EnumMember(Value = "Subtitle")]
         Subtitle = 2,
-
-        [EnumMember(Value = "TranslatedTitle")]
         TranslatedTitle = 3,
-
-        [EnumMember(Value = "Other")]
         Other = 4
     }
 }

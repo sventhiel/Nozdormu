@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Nozdormu.Library.Models.ORCID;
 using RestSharp;
@@ -9,7 +10,7 @@ namespace Nozdormu.Server.Controllers
     [ApiController]
     public class ORCIDController : ControllerBase
     {
-        [HttpGet("ORCID/{orcid}/Person")]
+        [HttpGet("orcid/{orcid}/person"), AllowAnonymous]
         public ORCIDPerson GetName(string orcid)
         {
             var client = new RestClient("https://pub.orcid.org/v3.0/");

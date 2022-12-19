@@ -11,7 +11,7 @@ namespace Nozdormu.Library.Models.DataCite
         public string Subject { get; set; }
 
         [JsonConstructor]
-        protected DataCiteSubject()
+        public DataCiteSubject()
         { }
 
         public DataCiteSubject(string subject)

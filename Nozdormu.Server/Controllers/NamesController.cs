@@ -8,23 +8,22 @@ namespace Nozdormu.Server.Controllers
     [ApiController]
     public class NamesController : ControllerBase
     {
-        [Authorize]
-        [HttpGet("Name")]
+        [HttpGet("name"), AllowAnonymous]
         public HumanName GetName(string name)
         {
             return new HumanName(name);
         }
 
-        [HttpPost("Names")]
-        public List<HumanName> GetNames([FromBody] List<string> names)
-        {
-            var list = new List<HumanName>();
+        //[HttpPost("names"), AllowAnonymous]
+        //public List<HumanName> GetNames([FromBody] List<string> names)
+        //{
+        //    var list = new List<HumanName>();
 
-            foreach (var name in names)
-            {
-                list.Add(new HumanName(name));
-            }
-            return list;
-        }
+        //    foreach (var name in names)
+        //    {
+        //        list.Add(new HumanName(name));
+        //    }
+        //    return list;
+        //}
     }
 }

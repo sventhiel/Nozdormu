@@ -45,7 +45,7 @@ namespace Nozdormu.Library.Models
         [JsonProperty("data.attributes.identifiers")]
         public List<DataCiteIdentifier> Identifiers { get; set; }
 
-        [Required, NotEmpty]
+        [NotEmpty]
         [JsonRequired]
         [JsonProperty("data.attributes.creators")]
         public List<DataCiteCreator> Creators { get; set; }
@@ -245,7 +245,7 @@ namespace Nozdormu.Library.Models
             var jsonSettings = new JsonSerializerSettings
             {
                 NullValueHandling = NullValueHandling.Ignore,
-                DefaultValueHandling = DefaultValueHandling.Ignore,
+                DefaultValueHandling = DefaultValueHandling.Ignore
                 //Converters = new[] { new JsonPathConverter() }
             };
 
@@ -255,63 +255,33 @@ namespace Nozdormu.Library.Models
 
     public enum DataCiteEventType
     {
-        [EnumMember(Value = "publish")]
         Publish = 1,
-
-        [EnumMember(Value = "register")]
         Register = 2,
-
-        [EnumMember(Value = "hide")]
         Hide = 3
     }
 
     public enum DataCiteStateType
     {
-        [EnumMember(Value = "findable")]
         Findable = 1,
-
-        //[EnumMember(Value = "register")]
-        [EnumMember(Value = "registered")]
         Registered = 2,
-
-        //[EnumMember(Value = "hide")]
-        [EnumMember(Value = "draft")]
         Draft = 3
     }
 
     public enum DataCiteResourceType
     {
-        [EnumMember(Value = "Audiovisual")]
         Audiovisual = 1,
-
-        [EnumMember(Value = "Book")]
         Book = 2,
-
-        [EnumMember(Value = "BookChapter")]
         BookChapter = 3,
-
-        [EnumMember(Value = "Collection")]
         Collection = 4,
-
-        [EnumMember(Value = "ComputationalNotebook")]
         ComputationalNotebook = 5,
-
-        [EnumMember(Value = "ConferencePaper")]
         ConferencePaper = 6,
-
-        [EnumMember(Value = "ConferenceProceeding")]
         ConferenceProceeding = 7,
-
-        [EnumMember(Value = "DataPaper")]
         DataPaper = 8,
-
-        [EnumMember(Value = "Dataset")]
         Dataset = 9
     }
 
     public enum DataCiteType
     {
-        [EnumMember(Value = "dois")]
         DOIs = 1
     }
 }

@@ -21,7 +21,7 @@ namespace Nozdormu.Library.Models.DataCite
         public DataCiteDescriptionType? DescriptionType { get; set; }
 
         [JsonConstructor]
-        protected DataCiteDescription()
+        public DataCiteDescription()
         { }
 
         public DataCiteDescription(string description, string lang = null, DataCiteDescriptionType? descriptionType = null)
@@ -38,10 +38,7 @@ namespace Nozdormu.Library.Models.DataCite
 
     public enum DataCiteDescriptionType
     {
-        [EnumMember(Value = "Abstract")]
         Abstract = 1,
-
-        [EnumMember(Value = "Methods")]
         Methods = 2
     }
 }

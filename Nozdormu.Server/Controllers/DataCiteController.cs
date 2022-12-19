@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using LiteDB;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Formatters;
@@ -9,8 +10,12 @@ using Newtonsoft.Json.Serialization;
 using Nozdormu.Library.Extensions;
 using Nozdormu.Library.Models;
 using Nozdormu.Library.Models.ORCID;
+using Nozdormu.Server.Entities;
+using Nozdormu.Server.Services;
 using NuGet.Protocol;
 using RestSharp;
+using RestSharp.Authenticators;
+using System.ComponentModel.DataAnnotations;
 using System.Net;
 using System.Security.Cryptography;
 using System.Text;
@@ -19,17 +24,17 @@ using static System.Net.Mime.MediaTypeNames;
 
 namespace Nozdormu.Server.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api")]
     [ApiController]
     public class DataCiteController : ControllerBase
     {
-        [HttpGet("DOI"), AllowAnonymous]
-        public ReadDataCiteModel GetDOI(string doi)
+        [HttpGet("datacite/{doi}"), AllowAnonymous]
+        public IActionResult GetDOI(string doi)
         {
             var client = new RestClient("https://api.datacite.org");
             var request = new RestRequest($"dois/{doi}", Method.Get);
 
-            //request.AddHeader("Accept", "application/json");
+            request.AddHeader("Accept", "application/json");
 
             var response = client.Execute(request);
 
@@ -38,11 +43,11 @@ namespace Nozdormu.Server.Controllers
             //var write = CreateDataCiteModel.Deserialize(read.Serialize());
             //return read;
 
-            return JsonConvert.DeserializeObject<ReadDataCiteModel>(response.Content);
+            return Ok(ReadDataCiteModel.Deserialize(response.Content));
         }
 
-        [HttpGet("DOI2"), AllowAnonymous]
-        public IActionResult GetDOI2(string doi)
+        [HttpGet("datacite/{doi}/legacy"), AllowAnonymous]
+        public IActionResult GetDOILegacy(string doi)
         {
             var client = new RestClient("https://api.datacite.org");
 
@@ -55,12 +60,20 @@ namespace Nozdormu.Server.Controllers
             return new JsonResult(response.Data);
         }
 
-        [HttpPost("DOIs"), AllowAnonymous]
-        public List<ReadDataCiteModel> GetDOIs([FromBody] List<string> dois)
+        [HttpPost("datacite/doi"), Authorize]
+        public IActionResult PostDOI(CreateDataCiteModel model)
         {
-            var list = new List<ReadDataCiteModel>();
+            var username = User.Identity.Name;
 
-            return list;
+            List<ValidationResult> errors = new List<ValidationResult>();
+            if (!model.Validate(out errors))
+            {
+                return BadRequest();
+            }
+
+            var x = model.Serialize();
+
+            return Ok(x);
         }
     }
 }

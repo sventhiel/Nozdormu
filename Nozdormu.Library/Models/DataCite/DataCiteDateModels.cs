@@ -17,7 +17,7 @@ namespace Nozdormu.Library.Models.DataCite
         public DataCiteDateType DateType { get; set; }
 
         [JsonConstructor]
-        protected DataCiteDate()
+        public DataCiteDate()
         { }
 
         public DataCiteDate(string date, DataCiteDateType type)
@@ -30,13 +30,8 @@ namespace Nozdormu.Library.Models.DataCite
     [JsonConverter(typeof(StringEnumConverter))]
     public enum DataCiteDateType
     {
-        [EnumMember(Value = "Issued")]
         Issued = 1,
-
-        [EnumMember(Value = "Created")]
         Created = 2,
-
-        [EnumMember(Value = "Updated")]
         Updated = 3
     }
 }

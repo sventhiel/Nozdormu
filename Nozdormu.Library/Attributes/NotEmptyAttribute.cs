@@ -10,9 +10,9 @@ namespace Nozdormu.Library.Attributes
     {
         public override bool IsValid(object value)
         {
-            if (value.GetType() == typeof(ICollection))
+            if (value.GetType().GetGenericTypeDefinition() == typeof(List<>))
             {
-                var collection = (ICollection)value;
+                var collection = (IList)value;
                 return collection.Count > 0;
             }
 

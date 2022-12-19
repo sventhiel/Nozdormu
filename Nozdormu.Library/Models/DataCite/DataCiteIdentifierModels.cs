@@ -16,7 +16,7 @@ namespace Nozdormu.Library.Models.DataCite
         public DataCiteIdentifierType IdentifierType { get; set; }
 
         [JsonConstructor]
-        protected DataCiteIdentifier()
+        public DataCiteIdentifier()
         { }
 
         public DataCiteIdentifier(string identifier, DataCiteIdentifierType identifierType)
@@ -28,7 +28,6 @@ namespace Nozdormu.Library.Models.DataCite
 
     public enum DataCiteIdentifierType
     {
-        [EnumMember(Value = "DOI")]
         DOI = 1
     }
 }

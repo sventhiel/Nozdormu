@@ -24,7 +24,7 @@ namespace Nozdormu.Library.Extensions
             {
                 NullValueHandling = NullValueHandling.Ignore,
                 DefaultValueHandling = DefaultValueHandling.Ignore,
-                //Converters = new[] { new StringEnumConverter() }
+                Converters = new[] { new StringEnumConverter() }
             };
 
             return JsonConvert.SerializeObject(model, Formatting.None, jsonSettings);
@@ -36,7 +36,7 @@ namespace Nozdormu.Library.Extensions
             {
                 NullValueHandling = NullValueHandling.Ignore,
                 DefaultValueHandling = DefaultValueHandling.Ignore,
-                //Converters = new[] { new StringEnumConverter() }
+                Converters = new[] { new StringEnumConverter() }
             };
 
             return JsonConvert.SerializeObject(model, Formatting.None, jsonSettings);
