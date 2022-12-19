@@ -17,7 +17,6 @@ namespace Nozdormu.Library.Models.DataCite
         public string Description { get; set; }
 
         [JsonProperty("descriptionType")]
-        [JsonConverter(typeof(StringEnumConverter))]
         public DataCiteDescriptionType? DescriptionType { get; set; }
 
         [JsonConstructor]
@@ -39,6 +38,10 @@ namespace Nozdormu.Library.Models.DataCite
     public enum DataCiteDescriptionType
     {
         Abstract = 1,
-        Methods = 2
+        Methods = 2,
+        SeriesInformation = 3,
+        TableOfContents = 4,
+        TechnicalInfo = 5,
+        Other = 6
     }
 }

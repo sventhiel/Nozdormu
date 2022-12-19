@@ -72,7 +72,9 @@ namespace Nozdormu.Library.Models.DataCite
 
     public enum DataCiteCreatorType
     {
+        [EnumMember(Value = "Personal")]
         Personal = 1,
+        [EnumMember(Value = "Organizational")]
         Organizational = 2
     }
 }

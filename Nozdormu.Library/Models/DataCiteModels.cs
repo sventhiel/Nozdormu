@@ -240,6 +240,23 @@ namespace Nozdormu.Library.Models
         [JsonProperty("data.attributes.url")]
         public string URL { get; set; }
 
+        [JsonProperty("data.attributes.contentUrl")]
+        public List<string> ContentUrl { get; set; }
+
+        [JsonProperty("data.attributes.metadataVersion")]
+        public int MetadataVersion { get; set; }
+
+        [JsonProperty("data.attributes.schemaVersion")]
+        public string SchemaVersion { get; set; }
+
+        [JsonProperty("data.attributes.source")]
+        public string Source { get; set; }
+
+        [JsonProperty("data.attributes.isActive")]
+        public bool IsActive { get; set; }
+
+        [JsonProperty("data.attributes.reason")]
+        public string Reason { get; set; }
 
         #endregion data.attributes
 
@@ -255,6 +272,7 @@ namespace Nozdormu.Library.Models
             Subjects = new List<DataCiteSubject>();
             Titles = new List<DataCiteTitle>();
             FundingReferences = new List<DataCiteFundingReference>();
+            ContentUrl = new List<string>();
         }
 
         public static ReadDataCiteModel Deserialize(string json)

@@ -27,11 +27,18 @@ namespace Nozdormu.Library.Models.DataCite
         }
     }
 
-    [JsonConverter(typeof(StringEnumConverter))]
     public enum DataCiteDateType
     {
-        Issued = 1,
-        Created = 2,
-        Updated = 3
+        Accepted = 1,
+        Available = 2,
+        Copyrighted = 3,
+        Collected = 4,
+        Created = 5,
+        Issued = 6,
+        Submitted = 7,
+        Updated = 8,
+        Valid = 9,
+        Withdrawn = 10,
+        Other = 11
     }
 }
