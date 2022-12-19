@@ -1,4 +1,6 @@
-﻿namespace Nozdormu.Server.Entities
+﻿using LiteDB;
+
+namespace Nozdormu.Server.Entities
 {
     public class User
     {
@@ -8,9 +10,7 @@
         public string Salt { get; set; }
         public string Pattern { get; set; }
 
-        public string Token { get; set; }
-
-        //[BsonRef("accounts")]
-        //public Account Account { get; set; }
+        [BsonRef("accounts")]
+        public Account Account { get; set; }
     }
 }

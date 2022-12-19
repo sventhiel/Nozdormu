@@ -33,7 +33,7 @@ namespace Nozdormu.Server.Controllers
         {
             var client = new RestClient("https://api.test.datacite.org/");
             var request = new RestRequest($"dois/{doi}", Method.Get);
-            client.Authenticator = new HttpBasicAuthenticator("OODW.EQTDTN", "c0D2fMsGjmYJ_vQD5C");
+            //client.Authenticator = new HttpBasicAuthenticator("user", "password");
 
             request.AddHeader("Accept", "application/json");
 

@@ -29,8 +29,7 @@ namespace Nozdormu.Server.Services
                     Salt = salt,
                     Password = CryptographyUtils.GetSHA512HashAsBase64(salt, password),
                     Pattern = pattern,
-                    Token = CryptographyUtils.GetRandomHexadecimalString(32),
-                    //Account = accounts.FindById(accountId)
+                    Account = accounts.FindById(accountId)
                 };
 
                 return users.Insert(user);
@@ -69,21 +68,6 @@ namespace Nozdormu.Server.Services
                 var col = db.GetCollection<User>("users");
 
                 return col.FindById(id);
-            }
-        }
-
-        public User FindByToken(string token)
-        {
-            using (var db = new LiteDatabase(_connectionString))
-            {
-                var col = db.GetCollection<User>("users");
-
-                var users = col.Find(u => u.Token.Equals(token));
-
-                if (users.Count() != 1)
-                    return null;
-
-                return users.First();
             }
         }
 

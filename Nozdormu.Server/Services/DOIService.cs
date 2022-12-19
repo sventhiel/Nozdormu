@@ -12,7 +12,7 @@ namespace Nozdormu.Server.Services
             _connectionString = connectionString;
         }
 
-        public long Create(string prefix, string suffix, DOIState state, long userId)
+        public long Create(string prefix, string suffix, long userId)
         {
             using (var db = new LiteDatabase(_connectionString))
             {
@@ -24,7 +24,6 @@ namespace Nozdormu.Server.Services
                     Prefix = prefix,
                     Suffix = suffix,
                     CreationDate = DateTime.Now,
-                    State = state,
                     User = users.FindById(userId)
                 };
 
