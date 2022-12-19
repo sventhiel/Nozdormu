@@ -21,14 +21,20 @@ namespace Nozdormu.Library.Models.DataCite
         public string FamilyName { get; set; }
 
         [JsonProperty("nameType", DefaultValueHandling = DefaultValueHandling.Ignore)]
-        [JsonConverter(typeof(StringEnumConverter))]
         public DataCiteCreatorType NameType { get; set; }
 
+        [JsonProperty("affiliation")]
+        public List<DataCiteAffiliation> Affiliation { get; set; }
 
+        [JsonProperty("nameIdentifiers")]
+        public List<DataCiteNameIdentifier> NameIdentifiers { get; set; }
 
         [JsonConstructor]
         public DataCiteCreator()
-        { }
+        {
+            Affiliation = new List<DataCiteAffiliation>();
+            NameIdentifiers = new List<DataCiteNameIdentifier>();
+        }
 
         public DataCiteCreator(string name, DataCiteCreatorType type)
         {

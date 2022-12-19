@@ -31,8 +31,9 @@ namespace Nozdormu.Server.Controllers
         [HttpGet("datacite/{doi}"), AllowAnonymous]
         public IActionResult GetDOI(string doi)
         {
-            var client = new RestClient("https://api.datacite.org");
+            var client = new RestClient("https://api.test.datacite.org/");
             var request = new RestRequest($"dois/{doi}", Method.Get);
+            client.Authenticator = new HttpBasicAuthenticator("OODW.EQTDTN", "c0D2fMsGjmYJ_vQD5C");
 
             request.AddHeader("Accept", "application/json");
 
@@ -63,12 +64,12 @@ namespace Nozdormu.Server.Controllers
         [HttpPost("datacite/doi"), Authorize]
         public IActionResult PostDOI(CreateDataCiteModel model)
         {
-            var username = User.Identity.Name;
+            var username = User?.Identity?.Name;
 
             List<ValidationResult> errors = new List<ValidationResult>();
             if (!model.Validate(out errors))
             {
-                return BadRequest();
+                return BadRequest(errors);
             }
 
             var x = model.Serialize();

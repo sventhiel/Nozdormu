@@ -19,7 +19,6 @@ namespace Nozdormu.Library.Models.DataCite
         public string Language { get; set; }
 
         [JsonProperty("titleType", DefaultValueHandling = DefaultValueHandling.Ignore)]
-        [JsonConverter(typeof(StringEnumConverter))]
         public DataCiteTitleType? TitleType { get; set; }
 
         [JsonConstructor]

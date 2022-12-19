@@ -146,7 +146,6 @@ namespace Nozdormu.Library.Models
         public string Id { get; set; }
 
         [JsonProperty("data.type")]
-        [JsonConverter(typeof(StringEnumConverter))]
         public DataCiteType Type { get; set; }
 
         #region data.attributes
@@ -161,7 +160,6 @@ namespace Nozdormu.Library.Models
         public string Suffix { get; set; }
 
         [JsonProperty("data.attributes.state")]
-        [JsonConverter(typeof(StringEnumConverter))]
         public DataCiteStateType State { get; set; }
 
         [JsonProperty("data.attributes.identifiers")]
@@ -194,7 +192,6 @@ namespace Nozdormu.Library.Models
         #region data.attributes.types
 
         [JsonProperty("data.attributes.types.resourceTypeGeneral")]
-        [JsonConverter(typeof(StringEnumConverter))]
         public DataCiteResourceType ResourceTypeGeneral { get; set; }
 
         [JsonProperty("data.attributes.types.resourceType")]
@@ -215,15 +212,34 @@ namespace Nozdormu.Library.Models
         #endregion data.attributes.types
 
         // Related Identifiers
+        [JsonProperty("data.attributes.relatedIdentifiers")]
+        public List<DataCiteRelatedIdentifier> RelatedIdentifiers { get; set; }
+
+
+        [JsonProperty("data.attributes.sizes")]
+        public List<string> Sizes { get; set; }
+
+        [JsonProperty("data.attributes.formats")]
+        public List<string> Formats { get; set; }
 
         [JsonProperty("data.attributes.version")]
         public string Version { get; set; }
 
-        [JsonProperty("data.attributes.url")]
-        public string URL { get; set; }
+        [JsonProperty("data.attributes.rightsList")]
+        public List<DataCiteRight> Rights { get; set; }
 
         [JsonProperty("data.attributes.descriptions")]
         public List<DataCiteDescription> Descriptions { get; set; }
+
+        [JsonProperty("data.attributes.geoLocations")]
+        public List<DataCiteGeoLocation> GeoLocations { get; set; }
+
+        [JsonProperty("data.attributes.fundingReferences")]
+        public List<DataCiteFundingReference> FundingReferences { get; set; }
+
+        [JsonProperty("data.attributes.url")]
+        public string URL { get; set; }
+
 
         #endregion data.attributes
 
@@ -238,6 +254,7 @@ namespace Nozdormu.Library.Models
             Identifiers = new List<DataCiteIdentifier>();
             Subjects = new List<DataCiteSubject>();
             Titles = new List<DataCiteTitle>();
+            FundingReferences = new List<DataCiteFundingReference>();
         }
 
         public static ReadDataCiteModel Deserialize(string json)
@@ -255,15 +272,25 @@ namespace Nozdormu.Library.Models
 
     public enum DataCiteEventType
     {
+        [EnumMember(Value = "publish")]
         Publish = 1,
+
+        [EnumMember(Value = "register")]
         Register = 2,
+
+        [EnumMember(Value = "hide")]
         Hide = 3
     }
 
     public enum DataCiteStateType
     {
+        [EnumMember(Value = "findable")]
         Findable = 1,
+
+        [EnumMember(Value = "registered")]
         Registered = 2,
+
+        [EnumMember(Value = "draft")]
         Draft = 3
     }
 
@@ -277,11 +304,30 @@ namespace Nozdormu.Library.Models
         ConferencePaper = 6,
         ConferenceProceeding = 7,
         DataPaper = 8,
-        Dataset = 9
+        Dataset = 9,
+        Dissertation = 10,
+        Event = 11,
+        Image = 12,
+        InteractiveResource = 13,
+        JournalArticle = 14,
+        Model = 15,
+        OutputManagementPlan = 16,
+        PeerReview = 17,
+        PhysicalObject = 18,
+        Preprint = 19,
+        Report = 20,
+        Service = 21,
+        Software = 22,
+        Sound = 23,
+        Standard = 24,
+        Text = 25,
+        Workflow = 26,
+        Other =27
     }
 
     public enum DataCiteType
     {
+        [EnumMember(Value = "dois")]
         DOIs = 1
     }
 }

@@ -11,6 +11,7 @@ using Newtonsoft.Json.Converters;
 using Nozdormu.Library.Converters;
 using Nozdormu.Server.Authentication;
 using System.Text;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -116,7 +117,7 @@ builder.Services.AddMvc(options =>
 builder.Services.AddControllers().AddJsonOptions(options =>
 {
     options.JsonSerializerOptions.Converters
-        .Add(new JsonStringEnumConverter());
+        .Add(new JsonStringEnumMemberConverter());
 
     options.JsonSerializerOptions.DefaultIgnoreCondition =
              JsonIgnoreCondition.WhenWritingNull;
