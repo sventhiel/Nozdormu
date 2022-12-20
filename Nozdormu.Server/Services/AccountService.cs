@@ -12,7 +12,7 @@ namespace Nozdormu.Server.Services
             _connectionString = connectionString;
         }
 
-        public long Create(string host, string prefix, string username, string password)
+        public long Create(string host, string prefix, string name, string password)
         {
             using (var db = new LiteDatabase(_connectionString))
             {
@@ -22,7 +22,7 @@ namespace Nozdormu.Server.Services
                 {
                     Host = host,
                     Prefix = prefix,
-                    Username = username,
+                    Name = name,
                     Password = password
                 };
 

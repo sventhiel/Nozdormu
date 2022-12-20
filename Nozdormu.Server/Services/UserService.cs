@@ -13,7 +13,7 @@ namespace Nozdormu.Server.Services
             _connectionString = connectionString;
         }
 
-        public long Create(string username, string password, string pattern, long accountId)
+        public long Create(string name, string password, string pattern, long? accountId)
         {
             using (var db = new LiteDatabase(_connectionString))
             {
@@ -25,7 +25,7 @@ namespace Nozdormu.Server.Services
 
                 var user = new User()
                 {
-                    Username = username,
+                    Name = name,
                     Salt = salt,
                     Password = CryptographyUtils.GetSHA512HashAsBase64(salt, password),
                     Pattern = pattern,
@@ -36,13 +36,13 @@ namespace Nozdormu.Server.Services
             }
         }
 
-        public bool Verify(string username, string password)
+        public bool Verify(string name, string password)
         {
             using (var db = new LiteDatabase(_connectionString))
             {
                 var users = db.GetCollection<User>("users");
 
-                var user = users.FindOne(u => u.Username == username);
+                var user = users.FindOne(u => u.Name == name);
 
                 if (user == null)
                     return false;
@@ -71,13 +71,16 @@ namespace Nozdormu.Server.Services
             }
         }
 
-        public User FindByName(string username)
+        public User? FindByName(string? name)
         {
+            if (name == null)
+                return null;
+
             using (var db = new LiteDatabase(_connectionString))
             {
                 var col = db.GetCollection<User>("users");
 
-                var users = col.Find(u => u.Username.Equals(username));
+                var users = col.Find(u => u.Name.Equals(name));
 
                 if (users.Count() != 1)
                     return null;
