@@ -20,6 +20,7 @@ namespace Nozdormu.Library.Models.DataCite
         public string ResourceTypeGeneral { get; set; }
     }
 
+    [System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.JsonStringEnumMemberConverter))]
     public enum RelatedIdentifierType
     {
         ARK = 1,
@@ -43,6 +44,7 @@ namespace Nozdormu.Library.Models.DataCite
         w3id = 19
     }
 
+    [System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.JsonStringEnumMemberConverter))]
     public enum RelationType
     {
         IsCitedBy = 1,

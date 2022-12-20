@@ -281,7 +281,6 @@ namespace Nozdormu.Library.Models
             {
                 NullValueHandling = NullValueHandling.Ignore,
                 DefaultValueHandling = DefaultValueHandling.Ignore
-                //Converters = new[] { new JsonPathConverter() }
             };
 
             return JsonConvert.DeserializeObject<ReadDataCiteModel>(json, jsonSettings);
@@ -300,6 +299,7 @@ namespace Nozdormu.Library.Models
         Hide = 3
     }
 
+    [System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.JsonStringEnumMemberConverter))]
     public enum DataCiteStateType
     {
         [EnumMember(Value = "findable")]
@@ -312,6 +312,7 @@ namespace Nozdormu.Library.Models
         Draft = 3
     }
 
+    [System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.JsonStringEnumMemberConverter))]
     public enum DataCiteResourceType
     {
         Audiovisual = 1,
@@ -340,9 +341,10 @@ namespace Nozdormu.Library.Models
         Standard = 24,
         Text = 25,
         Workflow = 26,
-        Other =27
+        Other = 27
     }
 
+    [System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.JsonStringEnumMemberConverter))]
     public enum DataCiteType
     {
         [EnumMember(Value = "dois")]

@@ -70,6 +70,7 @@ namespace Nozdormu.Library.Models.DataCite
         }
     }
 
+    [System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.JsonStringEnumMemberConverter))]
     public enum DataCiteCreatorType
     {
         [EnumMember(Value = "Personal")]

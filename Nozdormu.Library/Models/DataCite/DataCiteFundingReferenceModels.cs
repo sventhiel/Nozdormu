@@ -27,6 +27,7 @@ namespace Nozdormu.Library.Models.DataCite
         public string AwardTitle { get; set; }
     }
 
+    [System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.JsonStringEnumMemberConverter))]
     public enum FunderIdentifierType
     {
         [EnumMember(Value = "Crossref Funder ID")]
