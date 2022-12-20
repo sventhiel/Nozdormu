@@ -10,12 +10,10 @@ namespace Nozdormu.Server.Controllers
     [Authorize]
     public class AccountController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
         private ConnectionString _connectionString;
 
-        public AccountController(ILogger<HomeController> logger, ConnectionString connectionString)
+        public AccountController(ConnectionString connectionString)
         {
-            _logger = logger;
             _connectionString = connectionString;
         }
 
@@ -23,7 +21,7 @@ namespace Nozdormu.Server.Controllers
         {
             var accountService = new AccountService(_connectionString);
 
-            var accounts = accountService.Find();
+            var accounts = accountService.Find().Select(a => ReadAccountModel.Convert(a));
 
             return View(accounts);
         }

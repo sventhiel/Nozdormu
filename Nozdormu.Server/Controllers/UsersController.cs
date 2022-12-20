@@ -25,91 +25,69 @@ namespace Nozdormu.Server.Controllers
             _jwtConfiguration = configuration.GetSection("JWT").Get<JwtConfiguration>();
         }
 
-        public IActionResult Login()
+        //[Authorize]
+        //public IActionResult Profile()
+        //{
+        //    if (User?.Identity == null)
+        //        return "";
+
+        //    var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtConfiguration.IssuerSigningKey));
+
+        //    var token = new JwtSecurityToken(
+        //        issuer: _jwtConfiguration.ValidIssuer,
+        //        audience: _jwtConfiguration.ValidAudience,
+        //        expires: DateTime.Now.AddHours(_jwtConfiguration.ValidLifetime),
+        //        claims: new[] { new Claim(ClaimTypes.Name, User.Identity.Name) },
+        //signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha512)
+        //        );
+
+        //    return new JwtSecurityTokenHandler().WriteToken(token);
+        //}
+
+        [Authorize(Roles = "admin")]
+        public IActionResult Index()
         {
-            return View(new LoginUserModel());
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> Login(LoginUserModel model)
-        {
-            if (model.Username == "admin")
-            {
-                var claims = new List<Claim>
-                {
-                    new Claim(ClaimTypes.Name, model.Username),
-                    new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
-                };
-
-                var claimsIdentity = new ClaimsIdentity(
-                claims,
-                CookieAuthenticationDefaults.AuthenticationScheme);
-
-                await HttpContext.SignInAsync(
-                    CookieAuthenticationDefaults.AuthenticationScheme,
-                    new ClaimsPrincipal(claimsIdentity));
-
-                var token = GetToken();
-
-                return RedirectToAction("Index", "Home");
-            }
-
-            return View();
-        }
-
-        [Authorize]
-        public string GetToken()
-        {
-            var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtConfiguration.IssuerSigningKey));
-
-            var token = new JwtSecurityToken(
-                issuer: _jwtConfiguration.ValidIssuer,
-                audience: _jwtConfiguration.ValidAudience,
-                expires: DateTime.Now.AddHours(_jwtConfiguration.ValidLifetime),
-                claims: new[] { new Claim(ClaimTypes.Name, User.Identity.Name) },
-        signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha512)
-                );
-
-            return new JwtSecurityTokenHandler().WriteToken(token);
-        }
-
-        public IActionResult Index(string value = "hallo")
-        {
-            return View("Index", value);
-        }
-
-        public IActionResult Create()
-        {
+            //
+            // Create an instance of the user service to get all users from the database.
             var userService = new UserService(_connectionString);
 
-            userService.Create("admin", "admin", "leer", 1);
             //
             // Instead of returning all users from the database, each of them is
             // converted into a specific model, containing the properties
             // that should show up in the table of the view.
+            var users = userService.Find().Select(u => ReadUserModel.Convert(u));
 
-            return View();
+            return View(users);
         }
 
-        public IActionResult Verify()
+        [Authorize(Roles = "admin")]
+        public IActionResult Create()
         {
+            //
+            // Simply return the view with an empty model.
             return View();
         }
 
+        [Authorize(Roles = "admin")]
         [HttpPost]
-        public IActionResult Verify(LoginUserModel model)
+        public IActionResult Create(CreateUserModel model)
         {
-            var userService = new UserService(_connectionString);
+            if (ModelState.IsValid)
+            {
+                //
+                // Create an instance of the user service to create a new user to the database.
+                var userService = new UserService(_connectionString);
 
-            var user = userService.FindById(1);
+                //
+                // Call the user service with necessary properties to create a new user.
+                userService.Create(model.Name, model.Password, model.Pattern, model.AccountId);
 
-            user.Token = CryptographyUtils.GetRandomHexadecimalString(32);
+                //
+                // After creation of the new user, redirect to the table of all users.
+                return RedirectToAction("Index", "Users");
+            }
 
-            userService.Update(user);
-
-            var x = userService.Verify(model.Username, model.Password);
-
-            return View("Index", x.ToString());
+            return View(model);
         }
     }
 }

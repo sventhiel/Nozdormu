@@ -10,6 +10,7 @@ using Newtonsoft.Json.Serialization;
 using Nozdormu.Library.Extensions;
 using Nozdormu.Library.Models;
 using Nozdormu.Library.Models.ORCID;
+using Nozdormu.Server.Configurations;
 using Nozdormu.Server.Entities;
 using Nozdormu.Server.Services;
 using NuGet.Protocol;
@@ -28,23 +29,34 @@ namespace Nozdormu.Server.Controllers
     [ApiController]
     public class DataCiteController : ControllerBase
     {
+        private ConnectionString _connectionString;
+        private JwtConfiguration _jwtConfiguration;
+
+        public DataCiteController(IConfiguration configuration, ConnectionString connectionString)
+        {
+            _connectionString = connectionString;
+            _jwtConfiguration = configuration.GetSection("JWT").Get<JwtConfiguration>();
+        }
+
         [HttpGet("datacite/{doi}"), AllowAnonymous]
         public IActionResult GetDOI(string doi)
         {
-            var client = new RestClient("https://api.test.datacite.org/");
+            var userService = new UserService(_connectionString);
+            var user = userService.FindByName(User?.Identity?.Name);
+
+            var account = user?.Account;
+            if (account == null)
+                return BadRequest();
+
+            var client = new RestClient($"{account.Host}");
             var request = new RestRequest($"dois/{doi}", Method.Get);
-            //client.Authenticator = new HttpBasicAuthenticator("user", "password");
+            client.Authenticator = new HttpBasicAuthenticator($"{account.Name}", $"{account.Password}");
 
             request.AddHeader("Accept", "application/json");
 
             var response = client.Execute(request);
 
-            //var read = ReadDataCiteModel.Deserialize(response.Content);
-
-            //var write = CreateDataCiteModel.Deserialize(read.Serialize());
-            //return read;
-
-            return Ok(ReadDataCiteModel.Deserialize(response.Content));
+            return Ok(JsonConvert.DeserializeObject<ReadDataCiteModel>(response.Content));
         }
 
         [HttpGet("datacite/{doi}/legacy"), AllowAnonymous]

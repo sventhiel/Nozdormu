@@ -7,6 +7,7 @@ using Nozdormu.Server.Configurations;
 using Nozdormu.Server.Models;
 using Nozdormu.Server.Services;
 using System.Diagnostics;
+using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 
 namespace Nozdormu.Server.Controllers
@@ -16,12 +17,14 @@ namespace Nozdormu.Server.Controllers
         private readonly ILogger<HomeController> _logger;
         private ConnectionString _connectionString;
         private JwtConfiguration _jwtConfiguration;
+        private List<Admin> _admins;
 
         public HomeController(ILogger<HomeController> logger, IConfiguration configuration, ConnectionString connectionString)
         {
             _logger = logger;
             _connectionString = connectionString;
             _jwtConfiguration = configuration.GetSection("JWT").Get<JwtConfiguration>();
+            _admins = configuration.GetSection("Admins").Get<List<Admin>>();
         }
 
         public IActionResult Index()
@@ -29,26 +32,33 @@ namespace Nozdormu.Server.Controllers
             return View();
         }
 
+        public IActionResult AccessDenied()
+        {
+            return View();
+        }
+
         #region Authentication
 
-        public IActionResult Login()
+        public IActionResult Login(string returnUrl)
         {
+            ViewBag.ReturnUrl = returnUrl;
             return View(new LoginUserModel());
         }
 
         [HttpPost]
-        public async Task<IActionResult> Login(LoginUserModel model)
+        public async Task<IActionResult> Login(LoginUserModel model, string returnUrl = "")
         {
-            if (ModelState.IsValid)
+            //
+            // Check Admin Configuration first
+            var admin = _admins.Find(a => a.Name.Equals(model.Name));
+
+            if (admin != null && admin.Password.Equals(model.Password))
             {
-                var userService = new UserService(_connectionString);
-
-                if (!userService.Verify(model.Username, model.Password))
-                    return View();
-
-                var claims = new List<Claim>
+                var claims = new List<Claim>()
                 {
-                    new Claim(ClaimTypes.Name, model.Username)
+                    new Claim(ClaimTypes.Name, model.Name),
+                    new Claim(ClaimTypes.Role, "admin"),
+                    new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
                 };
 
                 var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
@@ -57,10 +67,49 @@ namespace Nozdormu.Server.Controllers
                     CookieAuthenticationDefaults.AuthenticationScheme,
                     new ClaimsPrincipal(claimsIdentity));
 
-                return RedirectToAction("Index", "Home");
+                if (Url.IsLocalUrl(returnUrl))
+                {
+                    ViewBag.ReturnUrl = returnUrl;
+                    return Redirect(returnUrl);
+
+                }
+                else
+                {
+                    return RedirectToAction("Index", "Home");
+                }
+            }
+            else
+            {
+                var userService = new UserService(_connectionString);
+
+                if (!userService.Verify(model.Name, model.Password))
+                    return View();
+
+                var claims = new List<Claim>()
+                {
+                    new Claim(ClaimTypes.Name, model.Name),
+                    new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+                };
+
+                var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+
+                await HttpContext.SignInAsync(
+                    CookieAuthenticationDefaults.AuthenticationScheme,
+                    new ClaimsPrincipal(claimsIdentity));
+
+                if (Url.IsLocalUrl(returnUrl))
+                {
+                    ViewBag.ReturnUrl = returnUrl;
+                    return Redirect(returnUrl);
+
+                }
+                else
+                {
+                    return RedirectToAction("Index", "Home");
+                }
             }
 
-            return View();
+
         }
 
         public async Task<IActionResult> Logout()
