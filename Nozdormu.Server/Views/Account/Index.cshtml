@@ -1,3 +1,40 @@
-﻿@using Nozdormu.Server.Entities
-@model List<Account>
+﻿@model IEnumerable<Nozdormu.Server.Models.ReadAccountModel>
+@{
+    ViewBag.Title = "Index";
+}
 
+<h2>Index</h2>
+
+<div class="container">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Password</th>
+                <th>Host</th>
+                <th>Prefix</th>
+            </tr>
+        </thead>
+        @foreach (var user in Model)
+        {
+            <tr>
+                <td>
+                    @user.Id
+                </td>
+                <td>
+                    @user.Name
+                </td>
+                <td>
+                    @user.Password
+                </td>
+                <td>
+                    @user.Host
+                </td>
+                <td>
+                    @user.Prefix
+                </td>
+            </tr>
+        }
+    </table>
+</div>

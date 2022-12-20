@@ -1,8 +1,36 @@
-﻿@model string
-@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model IEnumerable<Nozdormu.Server.Models.ReadUserModel>
 @{
+    ViewBag.Title = "Index";
 }
 
-@Html.DisplayFor(m => m)
+<h2>Index</h2>
+
+<div class="container">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Pattern</th>
+                <th>AccountId</th>
+            </tr>
+        </thead>
+        @foreach (var user in Model)
+        {
+        <tr>
+            <td>
+                @user.Id
+            </td>
+            <td>
+                @user.Name
+            </td>
+            <td>
+                @user.Pattern
+            </td>
+            <td>
+                @user.AccountId
+            </td>
+        </tr>
+        }
+    </table>
+</div>

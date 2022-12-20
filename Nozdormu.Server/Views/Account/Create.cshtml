@@ -1,4 +1,4 @@
-﻿@model Nozdormu.Server.Models.CreateUserModel
+﻿@model Nozdormu.Server.Models.CreateAccountModel
 @{
     ViewBag.Title = "Create";
 }
@@ -8,7 +8,7 @@
 <div class="row">
     <div class="col-md-8">
         <section id="loginForm">
-            @using (Html.BeginForm("Create", "Users", null, FormMethod.Post, true, new { @class = "form-horizontal", role = "form" }))
+            @using (Html.BeginForm("Create", "Account", null, FormMethod.Post, true, new { @class = "form-horizontal", role = "form" }))
             {
                 @Html.AntiForgeryToken()
                 <h4>Use your local account to login</h4>
@@ -19,6 +19,13 @@
                     <div class="col-md-10">
                         @Html.TextBoxFor(m => m.Name, new { @class = "form-control" })
                         @Html.ValidationMessageFor(m => m.Name, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(m => m.Host, new { @class = "col-md-2 control-label" })
+                    <div class="col-md-10">
+                        @Html.TextBoxFor(m => m.Host, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(m => m.Host, "", new { @class = "text-danger" })
                     </div>
                 </div>
                 <div class="form-group">
@@ -36,17 +43,10 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    @Html.LabelFor(m => m.Pattern, new { @class = "col-md-2 control-label" })
+                    @Html.LabelFor(m => m.Prefix, new { @class = "col-md-2 control-label" })
                     <div class="col-md-10">
-                        @Html.TextBoxFor(m => m.Pattern, new { @class = "form-control" })
-                        @Html.ValidationMessageFor(m => m.Pattern, "", new { @class = "text-danger" })
-                    </div>
-                </div>
-                <div class="form-group">
-                    @Html.LabelFor(m => m.AccountId, new { @class = "col-md-2 control-label" })
-                    <div class="col-md-10">
-                        @Html.TextBoxFor(m => m.AccountId, new { @class = "form-control" })
-                        @Html.ValidationMessageFor(m => m.AccountId, "", new { @class = "text-danger" })
+                        @Html.TextBoxFor(m => m.Prefix, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(m => m.Prefix, "", new { @class = "text-danger" })
                     </div>
                 </div>
                 <div class="form-group">
