@@ -71,8 +71,9 @@ builder.Services.AddAuthentication(options =>
     })
     .AddCookie(options =>
     {
-        options.LoginPath = "/Users/Login";
-        options.AccessDeniedPath = "/Users/Login";
+        options.LoginPath = "/Home/Login";
+        options.LogoutPath = "/Home/Logout";
+        options.AccessDeniedPath = "/Home/AccessDenied";
         options.ExpireTimeSpan = TimeSpan.FromDays(1);
     })
     .AddScheme<AuthenticationSchemeOptions, BasicAuthenticationHandler>
@@ -116,8 +117,8 @@ builder.Services.AddMvc(options =>
 
 builder.Services.AddControllers().AddJsonOptions(options =>
 {
-    options.JsonSerializerOptions.Converters
-        .Add(new JsonStringEnumMemberConverter());
+    //options.JsonSerializerOptions.Converters
+    //    .Add(new JsonStringEnumMemberConverter());
 
     options.JsonSerializerOptions.DefaultIgnoreCondition =
              JsonIgnoreCondition.WhenWritingNull;
