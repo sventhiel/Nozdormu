@@ -2,3 +2,13 @@
 // for details on configuring this project to bundle and minify static web assets.
 
 // Write your JavaScript code.
+
+function deletethething(id) {
+    $.ajax({
+        type: "Delete",
+        url: "/Accounts/Delete/" + id,
+        success: function (response) {
+            window.location.href = window.location.href;
+        }
+    });
+}

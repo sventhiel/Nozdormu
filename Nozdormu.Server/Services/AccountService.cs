@@ -43,7 +43,7 @@ namespace Nozdormu.Server.Services
             return accounts;
         }
 
-        public Account FindById(long id)
+        public Account FindById(int id)
         {
             using (var db = new LiteDatabase(_connectionString))
             {
@@ -52,12 +52,28 @@ namespace Nozdormu.Server.Services
             }
         }
 
-        public bool DeleteById(long id)
+        public bool DeleteById(int id)
         {
             using (var db = new LiteDatabase(_connectionString))
             {
-                var col = db.GetCollection<Account>("accounts");
-                return col.Delete(id);
+                var accounts = db.GetCollection<Account>("accounts");
+                var users = db.GetCollection<User>("users");
+
+                // cascade delete
+                foreach (var user in users.Find(u => u.Account.Id == id))
+                {
+                    user.Account = null;
+                    users.Update(user);
+                }
+
+                //
+                // prevent deletion
+                if (!users.Exists(u => u.Account.Id == id))
+                {
+                    return accounts.Delete(id);
+                }
+
+                return false;
             }
         }
 

@@ -11,6 +11,6 @@ namespace Nozdormu.Server.Entities
         public string Pattern { get; set; }
 
         [BsonRef("accounts")]
-        public Account Account { get; set; }
+        public Account? Account { get; set; }
     }
 }

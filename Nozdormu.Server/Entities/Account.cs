@@ -1,4 +1,6 @@
-﻿namespace Nozdormu.Server.Entities
+﻿using LiteDB;
+
+namespace Nozdormu.Server.Entities
 {
     public class Account
     {

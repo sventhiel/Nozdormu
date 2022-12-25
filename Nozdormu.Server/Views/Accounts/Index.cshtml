@@ -1,0 +1,67 @@
+﻿@using Nozdormu.Server.Extensions
+@model IEnumerable<Nozdormu.Server.Models.ReadAccountModel>
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+@Html.ActionLink("Create", "Create", "Accounts", null, new { @class = "btn btn-success" })
+
+<div class="container">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Password</th>
+                <th>Host</th>
+                <th>Prefix</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        @foreach (var account in Model)
+        {
+            <tr>
+                <td>
+                    @account.Id
+                </td>
+                <td>
+                    @account.Name
+                </td>
+                <td>
+                    @account.Password
+                </td>
+                <td>
+                    @account.Host
+                </td>
+                <td>
+                    @account.Prefix
+                </td>
+                <td>
+                    @Html.HelloWorldHTMLString()
+                    @Html.ActionLink("Update", "Update", "Accounts",new {id = account.Id}, new { @class = "btn btn-primary" })
+                    @Html.ActionLink("Delete", "Delete", "Accounts",new {id = account.Id}, new { data_ajax = "true", data_ajax_method = "DELETE", @class = "btn btn-primary" })
+                    @Html.AjaxActionLink("Delete", "Delete", "Accounts", new {id = account.Id}, new AjaxOptions { HttpMethod = "DELETE" }, new { data_ajax = "true", data_ajax_method = "DELETE", @class = "btn btn-primary" })
+                    <button id="test" onclick="deleteAccount(@account.Id)">Delete</button>
+                    <a data-ajax="true" data-ajax-method="DELETE" href="/Accounts/Delete/3">Delete</a>
+                </td>
+            </tr>
+        }
+    </table>
+</div>
+
+@section scripts
+{
+    <script>
+        function deleteAccount(id) {
+            $.ajax({
+                type: "Delete",
+                url: "/Accounts/Delete/" + id,
+                success: function (response) {
+                    window.location.href = window.location.href;
+                }
+            });
+        }
+    </script>
+}

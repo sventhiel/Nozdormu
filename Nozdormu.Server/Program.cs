@@ -1,3 +1,4 @@
+using AspNetCore.Unobtrusive.Ajax;
 using Exceptionless;
 using LiteDB;
 using Microsoft.AspNetCore.Authentication;
@@ -17,6 +18,7 @@ using System.Text.Json.Serialization;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddUnobtrusiveAjax();
 builder.Services.AddControllersWithViews();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
@@ -59,7 +61,12 @@ builder.Services.AddSwaggerGen(options =>
     options.OperationFilter<AuthorizeHeaderOperationFilter>();
 });
 
-builder.Services.AddExceptionless("s2I5hEu9zfDuBYAb9BOTXCFaJiiHbN625kpUbSFv");
+builder.Services.AddExceptionless(options =>
+{
+    options.ServerUrl = "https://idiv-exceptionless.fmi.uni-jena.de";
+    options.ApiKey = "RFRSCRxpd4lnyjtLagWd8U0MUc3o4ahOiQhsMgs2";
+});
+
 
 // LiteDB
 builder.Services.AddSingleton(new ConnectionString(builder.Configuration["ConnectionStrings:Nozdormu"]));
@@ -138,7 +145,7 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-
+app.UseUnobtrusiveAjax();
 app.UseRouting();
 
 app.UseAuthentication();
