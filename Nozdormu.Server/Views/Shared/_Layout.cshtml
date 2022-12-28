@@ -41,7 +41,8 @@
                     @if (User.Identity.IsAuthenticated)
                     {
                         <span>Howdy @User.Identity.Name !</span>
-                        @Html.ActionLink("Logout", "Logout", "Home", null, new { @class = "btn btn-primary" })
+                        @Html.AjaxActionLink("ljksad", "Logout", new AjaxOptions { HttpMethod = "POST"})
+                        @Html.AjaxActionLink("Logout", "Logout", "Home", null, new AjaxOptions { HttpMethod = "POST" }, new { @class = "btn btn-primary" })
                     }
                     else
                     {

@@ -3,10 +3,10 @@
 
 // Write your JavaScript code.
 
-function deletethething(id) {
+function handleActionLink(url, type) {
     $.ajax({
-        type: "Delete",
-        url: "/Accounts/Delete/" + id,
+        type: type,
+        url: url,
         success: function (response) {
             window.location.href = window.location.href;
         }

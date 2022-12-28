@@ -39,12 +39,8 @@
                     @account.Prefix
                 </td>
                 <td>
-                    @Html.HelloWorldHTMLString()
-                    @Html.ActionLink("Update", "Update", "Accounts",new {id = account.Id}, new { @class = "btn btn-primary" })
-                    @Html.ActionLink("Delete", "Delete", "Accounts",new {id = account.Id}, new { data_ajax = "true", data_ajax_method = "DELETE", @class = "btn btn-primary" })
-                    @Html.AjaxActionLink("Delete", "Delete", "Accounts", new {id = account.Id}, new AjaxOptions { HttpMethod = "DELETE" }, new { data_ajax = "true", data_ajax_method = "DELETE", @class = "btn btn-primary" })
-                    <button id="test" onclick="deleteAccount(@account.Id)">Delete</button>
-                    <a data-ajax="true" data-ajax-method="DELETE" href="/Accounts/Delete/3">Delete</a>
+                    @Html.ActionLink("Update", "Update", "Accounts", new { id = account.Id }, new { @class = "btn btn-primary" })
+                    @Html.ActionLink("Delete", "Delete", "Accounts", HttpMethod.Delete, new { id = account.Id }, new { @class = "btn btn-danger" })
                 </td>
             </tr>
         }
@@ -54,14 +50,6 @@
 @section scripts
 {
     <script>
-        function deleteAccount(id) {
-            $.ajax({
-                type: "Delete",
-                url: "/Accounts/Delete/" + id,
-                success: function (response) {
-                    window.location.href = window.location.href;
-                }
-            });
-        }
+        
     </script>
 }
